@@ -159,7 +159,7 @@ export default {
       };
       console.log(postData);
       await axios
-        .post("http://localhost:3000/notification", postData)
+        .post("https://cprob-api.herokuapp.com/notification", postData)
         .then((response) => {
           console.log(response);
           if (response.data.http == 201) {

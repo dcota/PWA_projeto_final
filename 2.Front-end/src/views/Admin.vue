@@ -99,7 +99,7 @@ Description: implementation of the view Gestão de Alunos (Admin)
       </section>
     </section>
   </section>
-  <section class="spacer"></section>
+  <div class="spacer"></div>
 </template>
 
 <style scoped>
@@ -149,7 +149,7 @@ export default {
       this.usersToAccept = [];
       this.showLoader(true);
       await axios
-        .get("http://localhost:3000/user", {
+        .get("https://cprob-api.herokuapp.com/user", {
           headers: {
             Authorization: this.token,
           },
@@ -187,7 +187,7 @@ export default {
     },
     acceptStd(_id) {
       axios
-        .put("http://localhost:3000/user/" + _id)
+        .put("https://cprob-api.herokuapp.com/user/" + _id)
         .then(() => {
           this.getUsers();
         })
@@ -197,7 +197,7 @@ export default {
     },
     deleteStd(_id) {
       axios
-        .delete("http://localhost:3000/user/" + _id)
+        .delete("https://cprob-api.herokuapp.com/user/" + _id)
         .then(() => {
           this.getUsers();
         })

@@ -222,7 +222,7 @@ export default {
         notifications: this.form.notifications,
       };
       await axios
-        .post("http://localhost:3000/user", postData)
+        .post("https://cprob-api.herokuapp.com/user", postData)
         .then((response) => {
           console.log(response);
           if (response.data.http == 201) {
