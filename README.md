@@ -18,3 +18,10 @@ BACK-END
 > Registo de pedidos de instrição de alunos, edição, remoção e alteração de alunos.
 > Registo de notificações
 > Sistema de envio de emails com notificações para todos os alunos que as subscreveram.
+
+TRABALHOS FUTUROS:
+> Implementação das restantes vistas
+> Implementar as funções de edição, detalhes e remover para os administradores
+> Implementar vista para os alunos quando autenticados verem os seus detalhes de conta e alterar.
+
+Duarte Cota @2022
