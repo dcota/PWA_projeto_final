@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "build",
+			"path": "2.Front-end/",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build - 2.Front-end",
+			"detail": "vue-cli-service build"
+		}
+	]
+}

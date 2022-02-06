@@ -61,7 +61,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     if (to.meta.auth && !store.getters[`auth/${IS_USER_AUTHENTICATED_GETTER}`] || store.getters[`auth/${GET_USER_LEVEL_GETTER}`] == 'student') {
         next('/Login')
-    } else if (!to.meta.auth && store.getters[`auth/${IS_USER_AUTHENTICATED_GETTER}`] && store.getters[`auth/${GET_USER_LEVEL_GETTER}`] == "admin") {
+    } else next()
+    
+    if (!to.meta.auth && store.getters[`auth/${IS_USER_AUTHENTICATED_GETTER}`] && store.getters[`auth/${GET_USER_LEVEL_GETTER}`] == "admin") {
         next('/Admin')
     }
     else {
