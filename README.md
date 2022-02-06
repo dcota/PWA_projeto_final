@@ -14,7 +14,7 @@ FRONT-END
 > Sistema de criação de notificações que podem ser para envio por emai, publicação na página de notícias ou ambas.
 
 BACK-END
-> Autenticação com JSON web token 
+> Autenticação com JSON web token, com armazenamento de dados de autenticação para os pedidos de admin e proteção de rotas com vuex
 > Registo de pedidos de instrição de alunos, edição, remoção e alteração de alunos.
 > Registo de notificações
 > Sistema de envio de emails com notificações para todos os alunos que as subscreveram.
@@ -23,5 +23,10 @@ TRABALHOS FUTUROS:
 > Implementação das restantes vistas
 > Implementar as funções de edição, detalhes e remover para os administradores
 > Implementar vista para os alunos quando autenticados verem os seus detalhes de conta e alterar.
+
+ESTUTURA:
+> 1.Prototipagem: contém o protótipo do projeto
+> 2.Front-end: contém todos os ficheiros do front-end da aplicação desenvolvida em Vue JS e Vuex
+> 3.Back-end: contém todos os ficheiros da API de back-end desenvolvida em Node JS com exceção da pasta node_modules e private, esta contendo as credenciais de autenticação na base de dados MongoDB Atlas
 
 Duarte Cota @2022
