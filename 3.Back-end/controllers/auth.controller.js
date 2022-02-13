@@ -40,6 +40,7 @@ exports.login = (req, res) => {
         let token = JWT.sign(payload, user.auth.private_key, options)
         let message = authMessages.success.s0
         const userData = {
+            _id: user._id,
             firstname: user.firstname,
             lastname: user.lastname,
             level: user.level,
@@ -55,8 +56,8 @@ exports.checkAuth = (req, res, callback) => {
     if (!token) return res.status(authMessages.error.e1.http).send(authMessages.error.e1)
     let payload = JWT.decode(token)
     User.findOne({
-        'auth.public_key': payload.pk
-    })
+            'auth.public_key': payload.pk
+        })
         .exec()
         .then((user, error) => {
             if (error) throw error

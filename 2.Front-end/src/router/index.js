@@ -12,10 +12,10 @@ import Admin from '../views/Admin.vue'
 import Notif from '../views/Notif.vue'
 import store from '../store/store'
 import News from '../views/News.vue'
-import { IS_USER_AUTHENTICATED_GETTER, GET_USER_LEVEL_GETTER } from '../store/storeconstants'
-
-const routes = [
-    {
+import Conta from '../views/Conta.vue'
+import { IS_USER_AUTHENTICATED_GETTER } from '../store/storeconstants'
+//GET_USER_LEVEL_GETTER
+const routes = [{
         path: '/',
         name: 'Home',
         component: Home,
@@ -50,6 +50,12 @@ const routes = [
         name: 'Notif',
         component: Notif,
         meta: { auth: true }
+    },
+    {
+        path: '/Conta',
+        name: 'Conta',
+        component: Conta,
+        meta: { auth: true }
     }
 ]
 
@@ -59,14 +65,11 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.auth && !store.getters[`auth/${IS_USER_AUTHENTICATED_GETTER}`] || store.getters[`auth/${GET_USER_LEVEL_GETTER}`] == 'student') {
+    if (to.meta.auth && !store.getters[`auth/${IS_USER_AUTHENTICATED_GETTER}`]) { //tirei getter tipo student
         next('/Login')
-    } else next()
-    
-    if (!to.meta.auth && store.getters[`auth/${IS_USER_AUTHENTICATED_GETTER}`] && store.getters[`auth/${GET_USER_LEVEL_GETTER}`] == "admin") {
-        next('/Admin')
-    }
-    else {
+            /*} else if (!to.meta.auth && store.getters[`auth/${IS_USER_AUTHENTICATED_GETTER}`] && store.getters[`auth/${GET_USER_LEVEL_GETTER}`] == "admin") {
+                next('/Admin')*/
+    } else {
         next()
     }
 })

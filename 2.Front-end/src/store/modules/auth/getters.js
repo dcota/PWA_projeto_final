@@ -4,10 +4,11 @@ Auhtor: Duarte Cota
 Description: implementation of getters to return the stored token, the state of the autentication and the user level
 */
 
-import { 
-    GET_USER_TOKEN_GETTER, 
-    IS_USER_AUTHENTICATED_GETTER , 
-    GET_USER_LEVEL_GETTER
+import {
+    GET_USER_TOKEN_GETTER,
+    IS_USER_AUTHENTICATED_GETTER,
+    GET_USER_LEVEL_GETTER,
+    GET_USER_ID_GETTER
 } from "../../storeconstants";
 
 export default {
@@ -21,5 +22,10 @@ export default {
     //noov
     [GET_USER_LEVEL_GETTER]: state => {
         return state.level
+    },
+
+    [GET_USER_ID_GETTER]: state => {
+        return state._id
     }
+
 }

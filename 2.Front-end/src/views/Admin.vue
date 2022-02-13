@@ -4,7 +4,7 @@ Auhtor: Duarte Cota
 Description: implementation of the view Gestão de Alunos (Admin)
 */
 
-<template>
+<template id="example-modal">
   <section class="container">
     <section class="row mt-3 text-center">
       <h1 class="text-center">GESTÃO DE ALUNOS</h1>
@@ -28,7 +28,7 @@ Description: implementation of the view Gestão de Alunos (Admin)
               <td>{{ user.course }}</td>
               <td>{{ user.class }}</td>
               <td class="text-center">
-                <button
+                <!--<button
                   type="button"
                   class="btn btn-warning btn-sm me-2 ac-btn"
                 >
@@ -42,11 +42,20 @@ Description: implementation of the view Gestão de Alunos (Admin)
                   class="btn btn-success btn-sm me-2 ac-btn"
                 >
                   <i class="fas fa-search me-1" aria-hidden="true"></i>Detalhes
+                </button>-->
+                <button
+                  @click="detail(user._id)"
+                  type="button"
+                  class="btn btn-success btn-sm me-2 ac-btn"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                >
+                  <i class="fas fa-search me-1" aria-hidden="true"></i>
+                  Detalhes
                 </button>
                 <button
+                  @click="deleteStd(user._id)"
                   type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#remover"
                   class="btn btn-danger btn-sm me-2 ac-btn"
                 >
                   <i class="far fa-trash-alt me-1" aria-hidden="true"></i
@@ -98,8 +107,71 @@ Description: implementation of the view Gestão de Alunos (Admin)
         </table>
       </section>
     </section>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      v-if="state == true"
+      aria-hidden="true"
+    >
+      <div class="modal-lg modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Detalhes do aluno:
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-3">Nome:</div>
+              <div class="col-md-4">{{ form.name }}</div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-3">Curso:</div>
+              <div class="col-md-4">{{ form.course }}</div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-3">Turma:</div>
+              <div class="col-md-4">{{ form.class }}</div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-3">Email:</div>
+              <div class="col-md-4">{{ form.email }}</div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-3">Contacto móvel:</div>
+              <div class="col-md-4">{{ form.mobile }}</div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-3">Data de nascimento:</div>
+              <div class="col-md-4">{{ form.bdate }}</div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-4">Subscrição de notificações:</div>
+              <div class="col-md-4">{{ form.notifications }}</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
-  <div class="spacer"></div>
 </template>
 
 <style scoped>
@@ -121,6 +193,7 @@ import {
   LOADING_SPINNER_SHOW_MUTATION,
   GET_USER_TOKEN_GETTER,
   GET_USER_LEVEL_GETTER,
+  GET_USER_ID_GETTER,
 } from "../store/storeconstants";
 export default {
   data() {
@@ -128,12 +201,31 @@ export default {
       data: localStorage.token,
       usersAccepted: [],
       usersToAccept: [],
+      showModal: true,
+      form: {
+        firstname: "",
+        lastname: "",
+        name: "",
+        course: "",
+        class: "",
+        email: "",
+        mobile: "",
+        bdate: "",
+        notifications: false,
+        teste: "ddddddd",
+      },
+      message: {
+        type: "",
+        msg: "",
+      },
+      state: false,
     };
   },
   computed: {
     ...mapGetters("auth", {
       token: GET_USER_TOKEN_GETTER,
       level: GET_USER_LEVEL_GETTER,
+      _id: GET_USER_ID_GETTER,
     }),
   },
   mounted() {
@@ -149,7 +241,8 @@ export default {
       this.usersToAccept = [];
       this.showLoader(true);
       await axios
-        .get("https://cprob-api.herokuapp.com/user", {
+        //.get("https://cprob-api.herokuapp.com/user", {
+        .get("http://localhost:3000/user", {
           headers: {
             Authorization: this.token,
           },
@@ -187,7 +280,8 @@ export default {
     },
     acceptStd(_id) {
       axios
-        .put("https://cprob-api.herokuapp.com/user/" + _id)
+        //.put("https://cprob-api.herokuapp.com/user/" + _id)
+        .put("http://localhost:3000/user/" + _id)
         .then(() => {
           this.getUsers();
         })
@@ -197,12 +291,43 @@ export default {
     },
     deleteStd(_id) {
       axios
-        .delete("https://cprob-api.herokuapp.com/user/" + _id)
+        //.delete("https://cprob-api.herokuapp.com/user/" + _id)
+        .delete("http://localhost:3000/user/" + _id)
         .then(() => {
           this.getUsers();
         })
         .catch((error) => {
           console.log(error);
+        });
+    },
+    async detail(_id) {
+      (this.message.type = ""), (this.message.msg = ""), this.showLoader(true);
+      await axios
+        .get("http://localhost:3000/user/" + _id, {
+          headers: {
+            Authorization: this.token,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.body);
+          (this.form.firstname = response.data.body.firstname),
+            (this.form.lastname = response.data.body.lastname),
+            (this.form.name = response.data.body.name),
+            (this.form.course = response.data.body.course),
+            (this.form.class = response.data.body.class),
+            (this.form.bdate = response.data.body.bdate),
+            (this.form.email = response.data.body.email),
+            (this.form.mobile = response.data.body.mobile);
+          if (response.data.body.notifications == "true")
+            this.form.notifications = "SIM";
+          else this.form.notifications = "NÃO";
+          this.state = true;
+          this.showLoader(false);
+        })
+        .catch(() => {
+          this.message.msg = "Ocorreu um problema";
+          this.message.type = "warning";
+          this.showLoader(false);
         });
     },
   },

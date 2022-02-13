@@ -25,25 +25,25 @@ Description: implementation of the navbar
       >
         <ul class="navbar-nav">
           <li class="nav-item" v-if="isAuthenticated && level == 'student'">
-            <router-link to="/" class="nb">VER CONTA</router-link>
+            <router-link to="/Conta" class="nb">VER CONTA</router-link>
           </li>
           <li class="nav-item" v-if="!isAuthenticated">
             <router-link to="/Enrollment" class="nb">INSCRIÇÕES</router-link>
           </li>
-          <li class="nav-item" v-if="!isAuthenticated">
+          <li class="nav-item"> <!--v-if="!isAuthenticated || level == 'student'"-->
             <router-link to="/News" class="nb">NOTÍCIAS</router-link>
           </li>
-          <li class="nav-item" v-if="!isAuthenticated">
+          <li class="nav-item" v-if="!isAuthenticated || level == 'student'" >
             <router-link to="/" class="nb">SOBRE O CLUBE</router-link>
           </li>
-          <li class="nav-item" v-if="!isAuthenticated">
+          <li class="nav-item" v-if="!isAuthenticated || level == 'student'">
             <router-link to="/" class="nb">PROJETOS</router-link>
           </li>
-          <li class="nav-item" v-if="!isAuthenticated">
+          <li class="nav-item" v-if="!isAuthenticated || level == 'student'">
             <router-link to="/" class="nb">CONTACTOS</router-link>
           </li>
           <li class="nav-item" v-if="isAuthenticated && level == 'admin'">
-            <router-link to="notif" class="nb">CRIAR NOTIFICAÇÃO</router-link>
+            <router-link to="notif" class="nb">CRIAR NOTÍCIA</router-link>
           </li>
           <li class="nav-item" v-if="isAuthenticated && level == 'admin'">
             <router-link to="/Admin" class="nb">GESTÃO DE ALUNOS</router-link>

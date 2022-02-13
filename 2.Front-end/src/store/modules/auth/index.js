@@ -5,7 +5,8 @@ import getters from "./getters"
 export default {
     namespaced: true,
     state() {
-        return{
+        return {
+            _id: '',
             token: '',
             firstname: '',
             lastname: '',

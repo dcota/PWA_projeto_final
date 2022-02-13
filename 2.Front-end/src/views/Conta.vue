@@ -1,17 +1,17 @@
 /*
 MEIW - Programação Web Avançada - projeto final
 Auhtor: Duarte Cota
-Description: implementation of the view Ficha de Inscrição
+Description: implementation of the view Alterar Conta
 */
 
 <template>
   <section class="scrolling-component" ref="scrollcomponent">
     <section class="container my-body">
-      <h1 class="text-center mt-5">FICHA DE INSCRIÇÃO</h1>
+      <h1 class="text-center mt-5">DETALHES DA CONTA</h1>
       <section class="alert mt-3" v-bind:class="'alert-' + message.type">
         {{ message.msg }}
       </section>
-      <form class="form-signin" v-on:submit.prevent="send">
+      <form class="form-signin" v-on:submit.prevent="update">
         <section class="row mt-5">
           <section class="col-md-2">
             <input
@@ -84,30 +84,9 @@ Description: implementation of the view Ficha de Inscrição
             <input
               placeholder="Data de nascimento"
               class="form-control textbox-n"
-              type="text"
+              type="date"
               v-model="form.bdate"
-              onfocus="(this.type = 'date')"
               id="bdate"
-            />
-          </section>
-        </section>
-        <section class="row mt-4">
-          <section class="col-md-4">
-            <input
-              type="text"
-              v-model="form.auth.username"
-              class="form-control"
-              id="username"
-              placeholder="username..."
-            />
-          </section>
-          <section class="col-md-4">
-            <input
-              type="password"
-              v-model="form.auth.password"
-              class="form-control"
-              id="password"
-              placeholder="password..."
             />
           </section>
         </section>
@@ -133,21 +112,14 @@ Description: implementation of the view Ficha de Inscrição
             type="submit"
             class="btn btn-outline-primary mt-4 me-4 my-button"
           >
-            SUBMETER
+            ALTERAR
           </button>
           <button
-            @click="cleanForm()"
-            type="button"
-            class="btn btn-outline-primary mt-4 me-4 my-button"
-          >
-            LIMPAR
-          </button>
-          <button
-            @click="back()"
+            @click="leave()"
             type="button"
             class="btn btn-outline-primary mt-4 my-button"
           >
-            VOLTAR
+            SAIR
           </button>
         </section>
       </form>
@@ -178,8 +150,13 @@ select option[disabled]:first-child {
 
 <script>
 import axios from "axios";
-import { mapMutations } from "vuex";
-import { LOADING_SPINNER_SHOW_MUTATION } from "../store/storeconstants";
+import { mapGetters, mapMutations } from "vuex";
+import {
+  LOADING_SPINNER_SHOW_MUTATION,
+  GET_USER_TOKEN_GETTER,
+  GET_USER_LEVEL_GETTER,
+  GET_USER_ID_GETTER,
+} from "../store/storeconstants";
 export default {
   name: "submit",
   data() {
@@ -193,11 +170,7 @@ export default {
         email: "",
         mobile: "",
         bdate: "",
-        auth: {
-          username: "",
-          password: "",
-        },
-        notifications: true,
+        notifications: false,
       },
       message: {
         type: "",
@@ -205,12 +178,48 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapGetters("auth", {
+      token: GET_USER_TOKEN_GETTER,
+      level: GET_USER_LEVEL_GETTER,
+      _id: GET_USER_ID_GETTER,
+    }),
+  },
+  mounted() {
+    this.getStudentInfo();
+  },
   methods: {
     ...mapMutations({
       showLoader: LOADING_SPINNER_SHOW_MUTATION,
     }),
-    async send() {
-      (this.message.type = ""), (this.message.msg = "");
+    async getStudentInfo() {
+      (this.message.type = ""), (this.message.msg = ""), this.showLoader(true);
+      await axios
+        .get("http://localhost:3000/user/" + this._id, {
+          headers: {
+            Authorization: this.token,
+          },
+        })
+        .then((response) => {
+          this.form.firstname = response.data.body.firstname,
+          this.form.lastname = response.data.body.lastname,
+          this.form.name = response.data.body.name,
+          this.form.course = response.data.body.course,
+          this.form.class = response.data.body.class,
+          this.form.bdate = response.data.body.bdate,
+          this.form.email = response.data.body.email,
+          this.form.mobile = response.data.body.mobile,
+          this.form.notifications = response.data.body.notifications
+          this.showLoader(false);
+        })
+        .catch(() => {
+          this.message.msg = "Ocorreu um problema";
+          this.message.type = "warning";
+          this.showLoader(false);
+        });
+    },
+    async update() {
+      (this.message.type = ""), (this.message.msg = ""), this.showLoader(true);
       let postData = {
         firstname: this.form.firstname,
         lastname: this.form.lastname,
@@ -219,31 +228,21 @@ export default {
         class: this.form.class,
         email: this.form.email,
         mobile: parseInt(this.form.mobile),
-        accepted: false,
-        level: "student",
         bdate: this.form.bdate,
-        auth: {
-          username: this.form.auth.username,
-          password: this.form.auth.password,
-        },
         notifications: this.form.notifications,
       };
-      if(this.checkForm==true){
-        this.showLoader(true)
-        await axios
+      await axios
         //.post("https://cprob-api.herokuapp.com/user", postData)
-        .post("http://localhost:3000/user", postData)
+        .patch("http://localhost:3000/user/" + this._id, postData, {
+          headers: {
+            Authorization: this.token,
+          },
+        })
         .then((response) => {
-          console.log(response);
-          if (response.data.http == 201) {
+          if (response.data.http == 200) {
             this.showLoader(false);
             this.message.type = "success";
-            this.message.msg = "Utilizador criado com sucesso.";
-            this.cleanForm();
-          } else if (response.data.http == 200) {
-            this.showLoader(false);
-            this.message.type = "warning";
-            this.message.msg = "Utilizador existente.";
+            this.message.msg = "Alterações registadas com sucesso.";
           } else {
             this.showLoader(false);
             this.message.type = "danger";
@@ -254,35 +253,9 @@ export default {
           this.error = "Valores inválidos!";
           this.showLoader(false);
         });
-      }
-      else {
-        this.message.type = "danger";
-        this.message.msg = "Todos os campos deve estar preenchidos!";
-      }
-      
     },
-    cleanForm() {
-      (this.form.firstname = ""),
-        (this.form.lastname = ""),
-        (this.form.name = ""),
-        (this.form.course = ""),
-        (this.form.class = ""),
-        (this.form.email = ""),
-        (this.form.mobile = ""),
-        (this.form.bdate = ""),
-        (this.form.auth = {
-          username: "",
-          password: "",
-        }),
-        (this.form.notifications = true);
-    },
-    back() {
-      this.$router.replace("/");
-    },
-    checkForm() {
-      if (this.firstname != "" && this.lastname != "" && this.name != "" && this.course!="" && this.class!="" && this.email!="" && this.mobile!="" && this.bdate!="" && this.username!="" && this.password!="")
-        return true;
-      else return false;
+    leave() {
+     this.$router.replace("/")
     },
   },
 };

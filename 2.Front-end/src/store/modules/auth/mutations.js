@@ -8,6 +8,7 @@ import { SET_USER_TOKEN_DATA_MUTATION, SET_AUTO_LOGOUT_MUTATION } from "../../st
 
 export default {
     [SET_USER_TOKEN_DATA_MUTATION](state, payload) {
+        state._id = payload._id
         state.firstname = payload.firstname
         state.lastname = payload.lastname
         state.level = payload.level
@@ -15,7 +16,7 @@ export default {
         state.autoLogout = false
     },
 
-    [SET_AUTO_LOGOUT_MUTATION](state){
-        state.autoLogout= true
+    [SET_AUTO_LOGOUT_MUTATION](state) {
+        state.autoLogout = true
     }
 }

@@ -60,7 +60,8 @@ export default {
       this.news = [];
       this.showLoader(true);
       await axios
-        .get("https://cprob-api.herokuapp.com/notification")
+        //.get("https://cprob-api.herokuapp.com/notification")
+        .get("http://localhost:3000/notification")
         .then((response) => {
           this.showLoader(false);
           let allNews = response.data.body;
@@ -81,9 +82,10 @@ export default {
           alert(error);
         });
     },
-    acceptStd(_id) {
+    /*acceptStd(_id) {
       axios
-        .put("https://cprob-api.herokuapp.com/user/" + _id)
+        //.put("https://cprob-api.herokuapp.com/user/" + _id)
+        .put("http://localhost:3000/user/" + _id)
         .then(() => {
           this.getUsers();
         })
@@ -93,14 +95,15 @@ export default {
     },
     deleteStd(_id) {
       axios
-        .delete("https://cprob-api.herokuapp.com/user/" + _id)
+        //.delete("https://cprob-api.herokuapp.com/user/" + _id)
+        .delete("http://localhost:3000/user/" + _id)
         .then(() => {
           this.getUsers();
         })
         .catch((error) => {
           console.log(error);
         });
-    },
+    },*/
   },
 };
 </script>

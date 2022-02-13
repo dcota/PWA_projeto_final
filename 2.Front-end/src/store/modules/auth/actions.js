@@ -23,6 +23,7 @@ let timer = '';
 export default {
     [LOGOUT_ACTION](context) {
         context.commit(SET_USER_TOKEN_DATA_MUTATION, {
+            _id: null,
             firstname: null,
             lastname: null,
             level: null,
@@ -69,6 +70,7 @@ export default {
                 context.dispatch(AUTO_LOGOUT_ACTION)
             }, expirationTime)
             let tokenData = {
+                _id: response.data.body._id,
                 firstname: response.data.body.firstname,
                 lastname: response.data.body.lastname,
                 level: response.data.body.level,
@@ -78,14 +80,14 @@ export default {
             localStorage.setItem('userData', JSON.stringify(tokenData))
             context.commit(SET_USER_TOKEN_DATA_MUTATION, tokenData)
             return true
-        }
-        else return false
+        } else return false
     },
 
     async [LOGIN_ACTION](context, payload) {
         return context.dispatch(AUTH_ACTION, {
             ...payload,
-            url: 'https://cprob-api.herokuapp.com/auth'
+            //url: 'https://cprob-api.herokuapp.com/auth'
+            url: 'http://localhost:3000/auth'
         })
     },
 }

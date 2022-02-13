@@ -4,12 +4,12 @@ Auhtor: Duarte Cota
 Description: configurations of the API 
 */
 
-require('dotenv').config({ path: '../private/.env'})
+require('dotenv').config({ path: '../private/.env' })
 const credentials = require('../private/credentials')
 
 module.exports = {
     mongodb: {
-        uri: 'mongodb+srv://'+ credentials.auth.username + ':' + credentials.auth.password + '@cluster0.6qmly.mongodb.net/apds?retryWrites=true&w=majority',
+        uri: 'mongodb+srv://' + credentials.auth.username + ':' + credentials.auth.password + '@cluster0.6qmly.mongodb.net/apds?retryWrites=true&w=majority',
         collections: {
             users: 'users',
             notifications: 'notifications',

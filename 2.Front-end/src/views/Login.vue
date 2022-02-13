@@ -93,8 +93,9 @@ export default {
       });
       if (response) {
         this.showLoader(false);
+        console.log(this.level)
         if (this.level == "admin") this.$router.replace("/Admin");
-        else this.$router.replace("/");
+        else if (this.level == "student") this.$router.replace("/");
       } else {
         this.error = "Username ou password incorreta!";
         this.showLoader(false);
