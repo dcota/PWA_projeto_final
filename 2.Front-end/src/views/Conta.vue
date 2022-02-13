@@ -8,8 +8,18 @@ Description: implementation of the view Alterar Conta
   <section class="scrolling-component" ref="scrollcomponent">
     <section class="container my-body">
       <h1 class="text-center mt-5">DETALHES DA CONTA</h1>
-      <section class="alert mt-3" v-bind:class="'alert-' + message.type">
+      <section
+        class="alert mt-3"
+        role="alert"
+        v-bind:class="'alert-' + message.type + ' alert-dismissible fade show'"
+      >
         {{ message.msg }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
       </section>
       <form class="form-signin" v-on:submit.prevent="update">
         <section class="row mt-5">
@@ -201,15 +211,15 @@ export default {
           },
         })
         .then((response) => {
-          this.form.firstname = response.data.body.firstname,
-          this.form.lastname = response.data.body.lastname,
-          this.form.name = response.data.body.name,
-          this.form.course = response.data.body.course,
-          this.form.class = response.data.body.class,
-          this.form.bdate = response.data.body.bdate,
-          this.form.email = response.data.body.email,
-          this.form.mobile = response.data.body.mobile,
-          this.form.notifications = response.data.body.notifications
+          (this.form.firstname = response.data.body.firstname),
+            (this.form.lastname = response.data.body.lastname),
+            (this.form.name = response.data.body.name),
+            (this.form.course = response.data.body.course),
+            (this.form.class = response.data.body.class),
+            (this.form.bdate = response.data.body.bdate),
+            (this.form.email = response.data.body.email),
+            (this.form.mobile = response.data.body.mobile),
+            (this.form.notifications = response.data.body.notifications);
           this.showLoader(false);
         })
         .catch(() => {
@@ -255,7 +265,7 @@ export default {
         });
     },
     leave() {
-     this.$router.replace("/")
+      this.$router.replace("/");
     },
   },
 };

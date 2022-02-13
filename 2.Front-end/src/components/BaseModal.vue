@@ -1,14 +1,14 @@
 <template>
-  <div class="vue-modal" v-show="open">
+  <section class="vue-modal" v-show="open">
       <transition name="slide">
-        <div class="veu-modal-inner">
-          <div class="vue-modal-content">
+        <section class="veu-modal-inner">
+          <section class="vue-modal-content">
             <slot />
             <button type="button" @click="$emit('close')">Close</button>
-          </div>
-        </div>
+          </section>
+        </section>
       </transition>
-    </div>
+    </section>
 </template>
 
 <script>

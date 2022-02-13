@@ -9,7 +9,19 @@ Description: implementation of the view Gestão de Alunos (Admin)
     <section class="row mt-3 text-center">
       <h1 class="text-center">GESTÃO DE ALUNOS</h1>
     </section>
-    <section id="box"></section>
+    <section
+      class="alert mt-3"
+      role="alert"
+      v-bind:class="'alert-' + message.type + ' alert-dismissible fade show'"
+    >
+      {{ message.msg }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </section>
     <section class="row mt-3">
       <h4>Alunos inscritos:</h4>
     </section>
@@ -28,21 +40,6 @@ Description: implementation of the view Gestão de Alunos (Admin)
               <td>{{ user.course }}</td>
               <td>{{ user.class }}</td>
               <td class="text-center">
-                <!--<button
-                  type="button"
-                  class="btn btn-warning btn-sm me-2 ac-btn"
-                >
-                  <i class="fas fa-edit me-1 act-btn" aria-hidden="true"></i
-                  >Editar
-                </button>
-                <button
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#ver"
-                  class="btn btn-success btn-sm me-2 ac-btn"
-                >
-                  <i class="fas fa-search me-1" aria-hidden="true"></i>Detalhes
-                </button>-->
                 <button
                   @click="detail(user._id)"
                   type="button"
@@ -108,7 +105,7 @@ Description: implementation of the view Gestão de Alunos (Admin)
       </section>
     </section>
     <!-- Modal -->
-    <div
+    <section
       class="modal fade"
       id="exampleModal"
       tabindex="-1"
@@ -116,9 +113,9 @@ Description: implementation of the view Gestão de Alunos (Admin)
       v-if="state == true"
       aria-hidden="true"
     >
-      <div class="modal-lg modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
+      <section class="modal-lg modal-dialog">
+        <section class="modal-content">
+          <section class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">
               Detalhes do aluno:
             </h5>
@@ -128,38 +125,38 @@ Description: implementation of the view Gestão de Alunos (Admin)
               data-bs-dismiss="modal"
               aria-label="Close"
             ></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-md-3">Nome:</div>
-              <div class="col-md-4">{{ form.name }}</div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-md-3">Curso:</div>
-              <div class="col-md-4">{{ form.course }}</div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-md-3">Turma:</div>
-              <div class="col-md-4">{{ form.class }}</div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-md-3">Email:</div>
-              <div class="col-md-4">{{ form.email }}</div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-md-3">Contacto móvel:</div>
-              <div class="col-md-4">{{ form.mobile }}</div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-md-3">Data de nascimento:</div>
-              <div class="col-md-4">{{ form.bdate }}</div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-md-4">Subscrição de notificações:</div>
-              <div class="col-md-4">{{ form.notifications }}</div>
-            </div>
-          </div>
-          <div class="modal-footer">
+          </section>
+          <section class="modal-body">
+            <section class="row">
+              <section class="col-md-3">Nome:</section>
+              <section class="col-md-4">{{ form.name }}</section>
+            </section>
+            <section class="row mt-3">
+              <section class="col-md-3">Curso:</section>
+              <section class="col-md-4">{{ form.course }}</section>
+            </section>
+            <section class="row mt-3">
+              <section class="col-md-3">Turma:</section>
+              <section class="col-md-4">{{ form.class }}</section>
+            </section>
+            <section class="row mt-3">
+              <section class="col-md-3">Email:</section>
+              <section class="col-md-4">{{ form.email }}</section>
+            </section>
+            <section class="row mt-3">
+              <section class="col-md-3">Contacto móvel:</section>
+              <section class="col-md-4">{{ form.mobile }}</section>
+            </section>
+            <section class="row mt-3">
+              <section class="col-md-3">Data de nascimento:</section>
+              <section class="col-md-4">{{ form.bdate }}</section>
+            </section>
+            <section class="row mt-3">
+              <section class="col-md-4">Subscrição de notificações:</section>
+              <section class="col-md-4">{{ form.notifications }}</section>
+            </section>
+          </section>
+          <section class="modal-footer">
             <button
               type="button"
               class="btn btn-primary"
@@ -167,10 +164,10 @@ Description: implementation of the view Gestão de Alunos (Admin)
             >
               Fechar
             </button>
-          </div>
-        </div>
-      </div>
-    </div>
+          </section>
+        </section>
+      </section>
+    </section>
   </section>
 </template>
 
@@ -212,13 +209,12 @@ export default {
         mobile: "",
         bdate: "",
         notifications: false,
-        teste: "ddddddd",
       },
       message: {
         type: "",
         msg: "",
       },
-      state: false,
+      state: true,
     };
   },
   computed: {
@@ -278,22 +274,38 @@ export default {
           alert(error);
         });
     },
-    acceptStd(_id) {
-      axios
+    async acceptStd(_id) {
+      this.showLoader(true);
+      await axios
         //.put("https://cprob-api.herokuapp.com/user/" + _id)
-        .put("http://localhost:3000/user/" + _id)
+        .put("http://localhost:3000/user/" + _id, {
+          headers: {
+            Authorization: this.token,
+          },
+        })
         .then(() => {
+          this.message.msg = "Utilizador aceite!";
+          this.message.type = "success";
+          this.showLoader(false);
           this.getUsers();
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    deleteStd(_id) {
-      axios
+    async deleteStd(_id) {
+      this.showLoader(true);
+      await axios
         //.delete("https://cprob-api.herokuapp.com/user/" + _id)
-        .delete("http://localhost:3000/user/" + _id)
+        .delete("http://localhost:3000/user/" + _id, {
+          headers: {
+            Authorization: this.token,
+          },
+        })
         .then(() => {
+          this.message.msg = "Utilizador eliminado!";
+          this.message.type = "success";
+          this.showLoader(false);
           this.getUsers();
         })
         .catch((error) => {
@@ -309,7 +321,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response.data.body);
           (this.form.firstname = response.data.body.firstname),
             (this.form.lastname = response.data.body.lastname),
             (this.form.name = response.data.body.name),

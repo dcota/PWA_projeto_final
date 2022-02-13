@@ -42,8 +42,8 @@ router.route('/')
 
 router.route('/:id')
     .get([param('id').isMongoId()], authController.checkAuth, userController.getone)
-    .put([param('id').isMongoId()], authController.checkAuth, userController.put)
-    .delete([param('id').isMongoId()], userController.delete)
+    .put([param('id').isMongoId()], userController.put)
+    .delete([param('id').isMongoId()], authController.checkAuth, userController.delete)
     .patch([param('id').isMongoId()], authController.checkAuth, userController.update)
 
 module.exports = router

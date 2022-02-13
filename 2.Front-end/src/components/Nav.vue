@@ -19,6 +19,13 @@ Description: implementation of the navbar
       >
         <span class="navbar-toggler-icon cust-toggler"></span>
       </button>
+      <section>
+        <ul class="navbar-nav">
+          <li class="nav-item" v-if="isAuthenticated">
+            <p class="nb1 mb-0 ms-0">{{ name }}</p>
+          </li>
+        </ul>
+      </section>
       <section
         class="collapse navbar-collapse justify-content-end"
         id="navbarSupportedContent"
@@ -30,10 +37,11 @@ Description: implementation of the navbar
           <li class="nav-item" v-if="!isAuthenticated">
             <router-link to="/Enrollment" class="nb">INSCRIÇÕES</router-link>
           </li>
-          <li class="nav-item"> <!--v-if="!isAuthenticated || level == 'student'"-->
+          <li class="nav-item">
+            <!--v-if="!isAuthenticated || level == 'student'"-->
             <router-link to="/News" class="nb">NOTÍCIAS</router-link>
           </li>
-          <li class="nav-item" v-if="!isAuthenticated || level == 'student'" >
+          <li class="nav-item" v-if="!isAuthenticated || level == 'student'">
             <router-link to="/" class="nb">SOBRE O CLUBE</router-link>
           </li>
           <li class="nav-item" v-if="!isAuthenticated || level == 'student'">
@@ -83,7 +91,8 @@ Description: implementation of the navbar
   padding-top: 20px;
   padding-bottom: 20px;
 }
-.nb {
+.nb,
+.nb1 {
   color: white !important;
   font-weight: bold;
   text-decoration: none !important;
@@ -104,12 +113,14 @@ import {
   IS_USER_AUTHENTICATED_GETTER,
   LOGOUT_ACTION,
   GET_USER_LEVEL_GETTER,
+  GET_USER_NAME_GETTER,
 } from "../store/storeconstants";
 export default {
   computed: {
     ...mapGetters("auth", {
       isAuthenticated: IS_USER_AUTHENTICATED_GETTER,
       level: GET_USER_LEVEL_GETTER,
+      name: GET_USER_NAME_GETTER,
     }),
   },
   methods: {

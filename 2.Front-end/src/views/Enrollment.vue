@@ -8,8 +8,18 @@ Description: implementation of the view Ficha de Inscrição
   <section class="scrolling-component" ref="scrollcomponent">
     <section class="container my-body">
       <h1 class="text-center mt-5">FICHA DE INSCRIÇÃO</h1>
-      <section class="alert mt-3" v-bind:class="'alert-' + message.type">
+      <section
+        class="alert mt-3"
+        role="alert"
+        v-bind:class="'alert-' + message.type + ' alert-dismissible fade show'"
+      >
         {{ message.msg }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
       </section>
       <form class="form-signin" v-on:submit.prevent="send">
         <section class="row mt-5">
@@ -228,38 +238,36 @@ export default {
         },
         notifications: this.form.notifications,
       };
-      if(this.checkForm==true){
-        this.showLoader(true)
+      if (this.checkForm() == true) {
+        this.showLoader(true);
         await axios
-        //.post("https://cprob-api.herokuapp.com/user", postData)
-        .post("http://localhost:3000/user", postData)
-        .then((response) => {
-          console.log(response);
-          if (response.data.http == 201) {
+          //.post("https://cprob-api.herokuapp.com/user", postData)
+          .post("http://localhost:3000/user", postData)
+          .then((response) => {
+            console.log(response);
+            if (response.data.http == 201) {
+              this.showLoader(false);
+              this.message.type = "success";
+              this.message.msg = "Utilizador criado com sucesso.";
+              this.cleanForm();
+            } else if (response.data.http == 200) {
+              this.showLoader(false);
+              this.message.type = "warning";
+              this.message.msg = "Utilizador existente.";
+            } else {
+              this.showLoader(false);
+              this.message.type = "danger";
+              this.message.msg = "Ocorreu um problema, tente de novo...";
+            }
+          })
+          .catch(() => {
+            this.error = "Valores inválidos!";
             this.showLoader(false);
-            this.message.type = "success";
-            this.message.msg = "Utilizador criado com sucesso.";
-            this.cleanForm();
-          } else if (response.data.http == 200) {
-            this.showLoader(false);
-            this.message.type = "warning";
-            this.message.msg = "Utilizador existente.";
-          } else {
-            this.showLoader(false);
-            this.message.type = "danger";
-            this.message.msg = "Ocorreu um problema, tente de novo...";
-          }
-        })
-        .catch(() => {
-          this.error = "Valores inválidos!";
-          this.showLoader(false);
-        });
-      }
-      else {
+          });
+      } else {
         this.message.type = "danger";
         this.message.msg = "Todos os campos deve estar preenchidos!";
       }
-      
     },
     cleanForm() {
       (this.form.firstname = ""),
@@ -280,7 +288,19 @@ export default {
       this.$router.replace("/");
     },
     checkForm() {
-      if (this.firstname != "" && this.lastname != "" && this.name != "" && this.course!="" && this.class!="" && this.email!="" && this.mobile!="" && this.bdate!="" && this.username!="" && this.password!="")
+      console.log("chama");
+      if (
+        this.form.firstname != "" &&
+        this.form.lastname != "" &&
+        this.form.name != "" &&
+        this.form.course != "" &&
+        this.form.class != "" &&
+        this.form.email != "" &&
+        this.form.mobile != "" &&
+        this.form.bdate != "" &&
+        this.form.auth.username != "" &&
+        this.form.auth.password != ""
+      )
         return true;
       else return false;
     },

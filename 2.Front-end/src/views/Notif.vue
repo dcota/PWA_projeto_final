@@ -8,8 +8,18 @@ Description: implementation of the Criar Notificação
   <section class="scrolling-component" ref="scrollcomponent">
     <section class="container my-body">
       <h1 class="text-center mt-5">CRIAR NOTIFICAÇÃO/AVISO</h1>
-      <section class="alert mt-3" v-bind:class="'alert-' + message.type">
+      <section
+        class="alert mt-3"
+        role="alert"
+        v-bind:class="'alert-' + message.type + ' alert-dismissible fade show'"
+      >
         {{ message.msg }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
       </section>
       <form class="form-signin" v-on:submit.prevent="createNotif">
         <section class="row mt-5">
@@ -91,9 +101,16 @@ Description: implementation of the Criar Notificação
         <button
           v-on:click="cleanForm"
           type="button"
-          class="btn btn-outline-primary mt-4 my-button"
+          class="btn btn-outline-primary mt-4 me-4 my-button"
         >
           LIMPAR
+        </button>
+        <button
+          @click="leave()"
+          type="button"
+          class="btn btn-outline-primary mt-4 my-button"
+        >
+          SAIR
         </button>
       </section>
       <section class="spacer"></section>
@@ -189,6 +206,9 @@ export default {
         (this.form.text = ""),
         (this.form.notifEmail = true),
         (this.form.notifPage = false);
+    },
+    leave() {
+      this.$router.replace("/Admin");
     },
   },
 };

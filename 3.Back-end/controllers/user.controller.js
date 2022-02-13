@@ -85,14 +85,14 @@ exports.put = (req, res) => {
     }
     User.findOneAndUpdate({ '_id': { $eq: req.params.id } }, { $set: { 'accepted': true } }, { new: true })
         .exec()
-        .then((user) => {
-            if (!user)
-                return res.status(userMessages.error.e0.http).send(userMessages.error.e0)
+        .then((user, error) => {
+            if (error) throw error
+            if (!user) return res.status(userMessages.error.e0.http).send(userMessages.error.e0)
             let message = userMessages.success.s1
             message.body = user
             return res.status(message.http).send(message)
         })
-        .catch(() => {
+        .catch((error) => {
             return res.status(userMessages.error.e1.http).send(userMessages.error.e1)
         })
 }
@@ -165,7 +165,6 @@ exports.getone = (req, res) => {
                 bdate: user.bdate,
                 notifications: user.notifications
             }
-            console.log(usr)
             message.body = usr
             return res.status(message.http).send(message)
         })
