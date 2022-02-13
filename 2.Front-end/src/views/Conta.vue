@@ -205,7 +205,8 @@ export default {
     async getStudentInfo() {
       (this.message.type = ""), (this.message.msg = ""), this.showLoader(true);
       await axios
-        .get("http://localhost:3000/user/" + this._id, {
+        .get("https://cprob-api.herokuapp.com/user/" + this._id, {
+        //.get("http://localhost:3000/user/" + this._id, {
           headers: {
             Authorization: this.token,
           },
@@ -242,8 +243,8 @@ export default {
         notifications: this.form.notifications,
       };
       await axios
-        //.post("https://cprob-api.herokuapp.com/user", postData)
-        .patch("http://localhost:3000/user/" + this._id, postData, {
+        .patch("https://cprob-api.herokuapp.com/user/" + this._id, postData, {
+        //.patch("http://localhost:3000/user/" + this._id, postData, {
           headers: {
             Authorization: this.token,
           },

@@ -241,8 +241,8 @@ export default {
       if (this.checkForm() == true) {
         this.showLoader(true);
         await axios
-          //.post("https://cprob-api.herokuapp.com/user", postData)
-          .post("http://localhost:3000/user", postData)
+          .post("https://cprob-api.herokuapp.com/user", postData)
+          //.post("http://localhost:3000/user", postData)
           .then((response) => {
             console.log(response);
             if (response.data.http == 201) {

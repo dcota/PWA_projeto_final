@@ -86,8 +86,8 @@ export default {
     async [LOGIN_ACTION](context, payload) {
         return context.dispatch(AUTH_ACTION, {
             ...payload,
-            //url: 'https://cprob-api.herokuapp.com/auth'
-            url: 'http://localhost:3000/auth'
+            url: 'https://cprob-api.herokuapp.com/auth'
+                //url: 'http://localhost:3000/auth'
         })
     },
 }

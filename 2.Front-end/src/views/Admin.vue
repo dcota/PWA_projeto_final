@@ -237,8 +237,8 @@ export default {
       this.usersToAccept = [];
       this.showLoader(true);
       await axios
-        //.get("https://cprob-api.herokuapp.com/user", {
-        .get("http://localhost:3000/user", {
+        .get("https://cprob-api.herokuapp.com/user", {
+        //.get("http://localhost:3000/user", {
           headers: {
             Authorization: this.token,
           },
@@ -277,8 +277,8 @@ export default {
     async acceptStd(_id) {
       this.showLoader(true);
       await axios
-        //.put("https://cprob-api.herokuapp.com/user/" + _id)
-        .put("http://localhost:3000/user/" + _id, {
+        .put("https://cprob-api.herokuapp.com/user/" + _id, {
+        //.put("http://localhost:3000/user/" + _id, {
           headers: {
             Authorization: this.token,
           },
@@ -296,8 +296,8 @@ export default {
     async deleteStd(_id) {
       this.showLoader(true);
       await axios
-        //.delete("https://cprob-api.herokuapp.com/user/" + _id)
-        .delete("http://localhost:3000/user/" + _id, {
+        .delete("https://cprob-api.herokuapp.com/user/" + _id, {
+        //.delete("http://localhost:3000/user/" + _id, {
           headers: {
             Authorization: this.token,
           },
@@ -315,7 +315,8 @@ export default {
     async detail(_id) {
       (this.message.type = ""), (this.message.msg = ""), this.showLoader(true);
       await axios
-        .get("http://localhost:3000/user/" + _id, {
+        .get("https://cprob-api.herokuapp.com/user/" + _id, {
+        //.get("http://localhost:3000/user/" + _id, {
           headers: {
             Authorization: this.token,
           },
@@ -329,7 +330,7 @@ export default {
             (this.form.bdate = response.data.body.bdate),
             (this.form.email = response.data.body.email),
             (this.form.mobile = response.data.body.mobile);
-          if (response.data.body.notifications == "true")
+          if (response.data.body.notifications == true)
             this.form.notifications = "SIM";
           else this.form.notifications = "NÃO";
           this.state = true;
