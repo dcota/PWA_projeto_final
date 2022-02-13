@@ -163,42 +163,44 @@ export default {
       showLoader: LOADING_SPINNER_SHOW_MUTATION,
     }),
     async createNotif() {
-      console.log("chama");
-      this.message.type = "";
-      this.message.msg = "";
-      this.showLoader(true);
-      let postData = {
-        title: this.form.title,
-        summary: this.form.summary,
-        text: this.form.text,
-        notifEmail: this.form.notifEmail,
-        notifPage: this.form.notifPage,
-      };
-      console.log(postData);
-      await axios
-        .post("https://cprob-api.herokuapp.com/notification", postData)
-        //.post("http://localhost:3000/notification", postData)
-        .then((response) => {
-          console.log(response);
-          if (response.data.http == 201) {
+      if (this.checkForm() == true) {
+        this.message.type = "";
+        this.message.msg = "";
+        this.showLoader(true);
+        let postData = {
+          title: this.form.title,
+          summary: this.form.summary,
+          text: this.form.text,
+          notifEmail: this.form.notifEmail,
+          notifPage: this.form.notifPage,
+        };
+        await axios
+          .post("https://cprob-api.herokuapp.com/notification", postData)
+          //.post("http://localhost:3000/notification", postData)
+          .then((response) => {
+            if (response.data.http == 201) {
+              this.showLoader(false);
+              this.message.type = "success";
+              this.message.msg = "Notificação criada com sucesso.";
+              this.cleanForm();
+            } else if (response.data.http == 200) {
+              this.showLoader(false);
+              this.message.type = "warning";
+              this.message.msg = "Notificação existente.";
+            } else {
+              this.showLoader(false);
+              this.message.type = "danger";
+              this.message.msg = "Ocorreu um problema, tente de novo...";
+            }
+          })
+          .catch(() => {
+            this.error = "Valores inválidos!";
             this.showLoader(false);
-            this.message.type = "success";
-            this.message.msg = "Notificação criada com sucesso.";
-            this.cleanForm();
-          } else if (response.data.http == 200) {
-            this.showLoader(false);
-            this.message.type = "warning";
-            this.message.msg = "Notificação existente.";
-          } else {
-            this.showLoader(false);
-            this.message.type = "danger";
-            this.message.msg = "Ocorreu um problema, tente de novo...";
-          }
-        })
-        .catch(() => {
-          this.error = "Valores inválidos!";
-          this.showLoader(false);
-        });
+          });
+      } else {
+        this.message.type = "danger";
+        this.message.msg = "Todos os campos deve estar preenchidos!";
+      }
     },
     cleanForm() {
       (this.form.title = ""),
@@ -209,6 +211,15 @@ export default {
     },
     leave() {
       this.$router.replace("/Admin");
+    },
+    checkForm() {
+      if (
+        this.form.title != "" &&
+        this.form.summary != "" &&
+        this.form.text != ""
+      )
+        return true;
+      else return false;
     },
   },
 };

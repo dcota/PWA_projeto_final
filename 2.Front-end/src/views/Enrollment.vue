@@ -244,7 +244,6 @@ export default {
           .post("https://cprob-api.herokuapp.com/user", postData)
           //.post("http://localhost:3000/user", postData)
           .then((response) => {
-            console.log(response);
             if (response.data.http == 201) {
               this.showLoader(false);
               this.message.type = "success";
@@ -288,7 +287,6 @@ export default {
       this.$router.replace("/");
     },
     checkForm() {
-      console.log("chama");
       if (
         this.form.firstname != "" &&
         this.form.lastname != "" &&

@@ -14,7 +14,7 @@ import store from '../store/store'
 import News from '../views/News.vue'
 import Conta from '../views/Conta.vue'
 import { IS_USER_AUTHENTICATED_GETTER } from '../store/storeconstants'
-//GET_USER_LEVEL_GETTER
+
 const routes = [{
         path: '/',
         name: 'Home',
@@ -67,8 +67,6 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     if (to.meta.auth && !store.getters[`auth/${IS_USER_AUTHENTICATED_GETTER}`]) { //tirei getter tipo student
         next('/Login')
-            /*} else if (!to.meta.auth && store.getters[`auth/${IS_USER_AUTHENTICATED_GETTER}`] && store.getters[`auth/${GET_USER_LEVEL_GETTER}`] == "admin") {
-                next('/Admin')*/
     } else {
         next()
     }

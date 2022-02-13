@@ -93,7 +93,6 @@ export default {
       });
       if (response) {
         this.showLoader(false);
-        console.log(this.level)
         if (this.level == "admin") this.$router.replace("/Admin");
         else if (this.level == "student") this.$router.replace("/");
       } else {

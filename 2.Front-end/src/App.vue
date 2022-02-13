@@ -11,7 +11,7 @@ Description: implementation of the main App component
   <section id="content">
     <router-view></router-view>
   </section>
-  <Footer />
+  <Footer/>
 </template>
 
 <script>
