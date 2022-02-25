@@ -9,18 +9,12 @@ Description: implementation of the view Gestão de Alunos (Admin)
     <section class="row mt-3 text-center">
       <h1 class="text-center">GESTÃO DE ALUNOS</h1>
     </section>
-    <section
+    <section v-if=isShow
       class="alert mt-3"
       role="alert"
-      v-bind:class="'alert-' + message.type + ' alert-dismissible fade show'"
+      v-bind:class="'alert-' + message.type"
     >
       {{ message.msg }}
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
     </section>
     <section class="row mt-3">
       <h4>Alunos inscritos:</h4>
@@ -168,6 +162,7 @@ Description: implementation of the view Gestão de Alunos (Admin)
         </section>
       </section>
     </section>
+    <section class="spacer"></section>
   </section>
 </template>
 
@@ -177,7 +172,6 @@ Description: implementation of the view Gestão de Alunos (Admin)
   color: white;
   font-weight: bold;
 }
-
 .spacer {
   height: 200px;
 }
@@ -215,6 +209,7 @@ export default {
         msg: "",
       },
       state: true,
+      isShow: false
     };
   },
   computed: {
@@ -286,6 +281,7 @@ export default {
         .then(() => {
           this.message.msg = "Utilizador aceite!";
           this.message.type = "success";
+          this.isShow=true
           this.showLoader(false);
           this.getUsers();
         })
@@ -305,6 +301,7 @@ export default {
         .then(() => {
           this.message.msg = "Utilizador eliminado!";
           this.message.type = "success";
+          this.isShow=true
           this.showLoader(false);
           this.getUsers();
         })
@@ -339,6 +336,7 @@ export default {
         .catch(() => {
           this.message.msg = "Ocorreu um problema";
           this.message.type = "warning";
+          this.isShow=true
           this.showLoader(false);
         });
     },

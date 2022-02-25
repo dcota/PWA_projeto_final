@@ -8,7 +8,7 @@ Description: implementation of the view Notícias
   <section class="container my-body">
     <h1 class="text-center mt-5">Notícias</h1>
     <section class="row">
-      <section class="col-4 mt-5" v-for="topic of this.news" :key="topic._id">
+      <section class="col-12 col-md-6 col-lg-4 mt-5" v-for="topic of this.news" :key="topic._id">
         <section
           class="card border mb-3"
           style="height: 18rem; border-color: #2b589f !important"
@@ -19,18 +19,25 @@ Description: implementation of the view Notícias
             >
           </section>
           <section class="card-body">
-            <h5 class="card-text mt-2">{{ topic.summary }}</h5>
-            <p class="card-text mt-3">{{ topic.text }}</p>
+            <h5 class="card-text mt-2 just">{{ topic.summary }}</h5>
+            <p class="card-text mt-3 just">{{ topic.text }}</p>
           </section>
         </section>
       </section>
     </section>
+    <section class="spacer"></section>
   </section>
 </template>
 
 <style scoped>
 .my-header {
   color: #2b589f;
+}
+.just {
+  text-align: justify;
+}
+.spacer {
+  height: 200px;
 }
 </style>
 

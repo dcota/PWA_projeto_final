@@ -9,15 +9,15 @@ Description: implementation of the navbar
     <section class="container-fluid">
       <a class="navbar-brand" href="#"></a>
       <button
-        class="navbar-toggler cust-toggler"
+        class="navbar-toggler cust-toggler me-auto mb-lg-0"
         type="button"
         data-bs-toggle="collapse"
         data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent"
-        aria-expanded="false"
+        aria-expanded="true"
         aria-label="Toggle navigation"
       >
-        <span class="navbar-toggler-icon cust-toggler"></span>
+      <span class="navbar-toggler-icon cust-toggler"></span>
       </button>
       <section>
         <ul class="navbar-nav">

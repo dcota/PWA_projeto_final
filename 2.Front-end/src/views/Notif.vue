@@ -9,22 +9,19 @@ Description: implementation of the Criar Notificação
     <section class="container my-body">
       <h1 class="text-center mt-5">CRIAR NOTIFICAÇÃO/AVISO</h1>
       <section
-        class="alert mt-3"
+        v-if="isShow"
         role="alert"
-        v-bind:class="'alert-' + message.type + ' alert-dismissible fade show'"
+        v-bind:class="'mt-3 alert alert-' + message.type"
       >
         {{ message.msg }}
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
       </section>
       <form class="form-signin" v-on:submit.prevent="createNotif">
         <section class="row mt-5">
           <section class="col-md-6">
-            <label for="title" class="form-label">Título:</label>
+            <label for="title" class="form-label"
+              >Título (max. 26 caracteres)- total de caracteres:
+              {{ form.title.length }}</label
+            >
             <input
               type="text"
               v-model="form.title"
@@ -37,7 +34,8 @@ Description: implementation of the Criar Notificação
         <section class="row mt-4">
           <section class="col-md-12">
             <label for="title" class="form-label"
-              >Resumo(100 caracteres):</label
+              >Resumo (max. 55 caracteres)- total de caracteres:
+              {{ form.summary.length }}</label
             >
             <textarea
               v-model="form.summary"
@@ -50,7 +48,10 @@ Description: implementation of the Criar Notificação
         </section>
         <section class="row mt-4">
           <section class="col-md-12">
-            <label for="text" class="form-label">Texto:</label>
+            <label for="text" class="form-label"
+              >Texto (max. 180 caracteres) - total de caracteres:
+              {{ form.text.length }}</label
+            >
             <textarea
               v-model="form.text"
               type="text"
@@ -156,6 +157,7 @@ export default {
         type: "",
         msg: "",
       },
+      isShow: false,
     };
   },
   methods: {
@@ -163,9 +165,24 @@ export default {
       showLoader: LOADING_SPINNER_SHOW_MUTATION,
     }),
     async createNotif() {
+      this.isShow = false;
+      this.message.type = "";
+      this.message.msg = "";
       if (this.checkForm() == true) {
         this.message.type = "";
         this.message.msg = "";
+        if (
+          !this.checkTitleLength() ||
+          !this.checkSummaryLength() ||
+          !this.checkTextLength()
+        ) {
+          this.message.type = "";
+          this.message.msg = "";
+          (this.message.type = "warning"),
+            (this.message.msg = "Número de caracteres inválido");
+          this.isShow = true;
+          return;
+        }
         this.showLoader(true);
         let postData = {
           title: this.form.title,
@@ -182,15 +199,17 @@ export default {
               this.showLoader(false);
               this.message.type = "success";
               this.message.msg = "Notificação criada com sucesso.";
-              this.cleanForm();
+              this.isShow = true;
             } else if (response.data.http == 200) {
               this.showLoader(false);
               this.message.type = "warning";
               this.message.msg = "Notificação existente.";
+              this.isShow = true;
             } else {
               this.showLoader(false);
               this.message.type = "danger";
               this.message.msg = "Ocorreu um problema, tente de novo...";
+              this.isShow = true;
             }
           })
           .catch(() => {
@@ -198,6 +217,7 @@ export default {
             this.showLoader(false);
           });
       } else {
+        this.isShow = true;
         this.message.type = "danger";
         this.message.msg = "Todos os campos deve estar preenchidos!";
       }
@@ -208,6 +228,7 @@ export default {
         (this.form.text = ""),
         (this.form.notifEmail = true),
         (this.form.notifPage = false);
+      this.isShow = false;
     },
     leave() {
       this.$router.replace("/Admin");
@@ -219,6 +240,18 @@ export default {
         this.form.text != ""
       )
         return true;
+      else return false;
+    },
+    checkTitleLength() {
+      if (this.form.title.length <= 26) return true;
+      else return false;
+    },
+    checkSummaryLength() {
+      if (this.form.summary.length <= 55) return true;
+      else return false;
+    },
+    checkTextLength() {
+      if (this.form.text.length <= 180) return true;
       else return false;
     },
   },

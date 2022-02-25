@@ -8,18 +8,12 @@ Description: implementation of the view Alterar Conta
   <section class="scrolling-component" ref="scrollcomponent">
     <section class="container my-body">
       <h1 class="text-center mt-5">DETALHES DA CONTA</h1>
-      <section
+      <section v-if=isShow
         class="alert mt-3"
         role="alert"
         v-bind:class="'alert-' + message.type + ' alert-dismissible fade show'"
       >
         {{ message.msg }}
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
       </section>
       <form class="form-signin" v-on:submit.prevent="update">
         <section class="row mt-5">
@@ -133,7 +127,6 @@ Description: implementation of the view Alterar Conta
           </button>
         </section>
       </form>
-
       <section class="spacer"></section>
     </section>
   </section>
@@ -186,6 +179,7 @@ export default {
         type: "",
         msg: "",
       },
+      isShow: false
     };
   },
   computed: {
@@ -226,6 +220,7 @@ export default {
         .catch(() => {
           this.message.msg = "Ocorreu um problema";
           this.message.type = "warning";
+          this.isShow=true
           this.showLoader(false);
         });
     },
@@ -253,7 +248,8 @@ export default {
           if (response.data.http == 200) {
             this.showLoader(false);
             this.message.type = "success";
-            this.message.msg = "Alterações registadas com sucesso.";
+            this.message.msg = "Alterações registadas com sucesso."
+            this.isShow = true
           } else {
             this.showLoader(false);
             this.message.type = "danger";

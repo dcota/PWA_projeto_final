@@ -8,22 +8,16 @@ Description: implementation of the view Ficha de Inscrição
   <section class="scrolling-component" ref="scrollcomponent">
     <section class="container my-body">
       <h1 class="text-center mt-5">FICHA DE INSCRIÇÃO</h1>
-      <section
+      <section v-if=isShow
         class="alert mt-3"
         role="alert"
-        v-bind:class="'alert-' + message.type + ' alert-dismissible fade show'"
+        v-bind:class="'alert-' + message.type"
       >
         {{ message.msg }}
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
       </section>
       <form class="form-signin" v-on:submit.prevent="send">
-        <section class="row mt-5">
-          <section class="col-md-2">
+        <section class="row mt-4">
+          <section class="col-md-2 g-4">
             <input
               type="text"
               v-model="form.firstname"
@@ -32,7 +26,7 @@ Description: implementation of the view Ficha de Inscrição
               placeholder="primeiro nome..."
             />
           </section>
-          <section class="col-md-2">
+          <section class="col-md-2 g-4">
             <input
               type="text"
               v-model="form.lastname"
@@ -41,7 +35,7 @@ Description: implementation of the view Ficha de Inscrição
               placeholder="último nome..."
             />
           </section>
-          <section class="col-md-8">
+          <section class="col-md-8 g-4">
             <input
               type="text"
               v-model="form.name"
@@ -51,8 +45,8 @@ Description: implementation of the view Ficha de Inscrição
             />
           </section>
         </section>
-        <section class="row mt-4">
-          <section class="col-md-8">
+        <section class="row">
+          <section class="col-md-8 g-4">
             <input
               type="text"
               v-model="form.course"
@@ -61,7 +55,7 @@ Description: implementation of the view Ficha de Inscrição
               placeholder="curso..."
             />
           </section>
-          <section class="col-md-4">
+          <section class="col-md-4 g-4">
             <input
               type="text"
               v-model="form.class"
@@ -71,8 +65,8 @@ Description: implementation of the view Ficha de Inscrição
             />
           </section>
         </section>
-        <section class="row mt-4">
-          <section class="col-md-4">
+        <section class="row">
+          <section class="col-md-4 g-4">
             <input
               type="text"
               v-model="form.email"
@@ -81,7 +75,7 @@ Description: implementation of the view Ficha de Inscrição
               placeholder="email..."
             />
           </section>
-          <section class="col-md-4">
+          <section class="col-md-4 g-4">
             <input
               type="text"
               v-model="form.mobile"
@@ -90,7 +84,7 @@ Description: implementation of the view Ficha de Inscrição
               placeholder="telemóvel..."
             />
           </section>
-          <section class="col-md-4">
+          <section class="col-md-4 g-4">
             <input
               placeholder="Data de nascimento"
               class="form-control textbox-n"
@@ -101,8 +95,8 @@ Description: implementation of the view Ficha de Inscrição
             />
           </section>
         </section>
-        <section class="row mt-4">
-          <section class="col-md-4">
+        <section class="row">
+          <section class="col-md-4 g-4">
             <input
               type="text"
               v-model="form.auth.username"
@@ -111,7 +105,7 @@ Description: implementation of the view Ficha de Inscrição
               placeholder="username..."
             />
           </section>
-          <section class="col-md-4">
+          <section class="col-md-4 g-4">
             <input
               type="password"
               v-model="form.auth.password"
@@ -213,6 +207,7 @@ export default {
         type: "",
         msg: "",
       },
+      isShow:false
     };
   },
   methods: {
@@ -241,22 +236,24 @@ export default {
       if (this.checkForm() == true) {
         this.showLoader(true);
         await axios
-          .post("https://cprob-api.herokuapp.com/user", postData)
-          //.post("http://localhost:3000/user", postData)
+          //.post("https://cprob-api.herokuapp.com/user", postData)
+          .post("http://localhost:3000/user", postData)
           .then((response) => {
             if (response.data.http == 201) {
               this.showLoader(false);
               this.message.type = "success";
-              this.message.msg = "Utilizador criado com sucesso.";
-              this.cleanForm();
+              this.message.msg = "Utilizador criado com sucesso. A sua inscrição fica pendente de aprovação.";
+              this.isShow=true
             } else if (response.data.http == 200) {
               this.showLoader(false);
               this.message.type = "warning";
               this.message.msg = "Utilizador existente.";
+              this.isShow=true
             } else {
               this.showLoader(false);
               this.message.type = "danger";
               this.message.msg = "Ocorreu um problema, tente de novo...";
+              this.isShow=true
             }
           })
           .catch(() => {
@@ -266,6 +263,7 @@ export default {
       } else {
         this.message.type = "danger";
         this.message.msg = "Todos os campos deve estar preenchidos!";
+        this.isShow=true
       }
     },
     cleanForm() {
@@ -281,7 +279,8 @@ export default {
           username: "",
           password: "",
         }),
-        (this.form.notifications = true);
+        (this.form.notifications = true)
+        this.isShow=false
     },
     back() {
       this.$router.replace("/");
